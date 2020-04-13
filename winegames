@@ -23,9 +23,9 @@ function main () {
 
 		#define wine prefix
 		if [[ "${game[5]}" == "" ]]; then
-			export WINEPREFIX=${HOME}/${game[2]}${game[1]}
+			export WINEPREFIX=${HOME}/wineprefixes/${game[2]}${game[1]}
 		else
-			export WINEPREFIX=${HOME}/wineprefixcustom/${game[5]}
+			export WINEPREFIX=${HOME}/wineprefixes/${game[5]}
 		fi
 		export STEAM_COMPAT_DATA_PATH=$WINEPREFIX
 
@@ -78,10 +78,10 @@ function main () {
 
 		#define wine prefix
 		if [[ "${game[5]}" == "" ]]; then
-			export WINEPREFIX=${HOME}/${game[2]}${game[1]}
+			export WINEPREFIX=${HOME}/wineprefixes/${game[2]}${game[1]}
 			echo "launching winecfg for ${game[0]} in prefix ${game[2]}${game[1]}"
 		else
-			export WINEPREFIX=${HOME}/wineprefixcustom/${game[5]}
+			export WINEPREFIX=${HOME}/wineprefixes/${game[5]}
 			echo "launching winecfg for ${game[0]} in custom prefix ${game[5]}"
 		fi
 		#append pfx to the env for proton prefixes
