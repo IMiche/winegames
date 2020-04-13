@@ -6,7 +6,8 @@ A simple script for launching games through wine or proton with custom settings
 
 ### Installation
 
-Just download the file and move into your bin folder
+Just download the file and run it.
+I suggest moving it to /usr/local/bin
 
 ### Usage
 
