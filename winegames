@@ -29,13 +29,14 @@ function main () {
 		fi
 		export STEAM_COMPAT_DATA_PATH=$WINEPREFIX
 
+		echo "${game[7]}"
 		#determine if to launch wine, proton or a custom fork
 		if [[ "${game[2]}" == "wine" ]]; then
 			echo "launching ${game[0]} through wine..."
 			exec wine "${game[4]}" "${game[7]}"
 		elif [[ "${game[2]}" == "proton" ]]; then
 			echo "launching ${game[0]} through proton..."
-			exec "${HOME}/.steam/steam/steamapps/common/Proton 5.0/proton" run "${game[4]}"
+			exec "${HOME}/.steam/steam/steamapps/common/Proton 5.0/proton" run "${game[4]}" "${game[7]}"
 		else
 			echo "launching ${game[0]} through ${game[2]}..."
 			#split needed because proton needs run command. fucking valve
@@ -43,7 +44,7 @@ function main () {
 			if [[ "${winefork[0]}" == "wine" ]]; then
 				exec "${HOME}/winecustom/${winefork[1]}" "${game[4]}" "${game[7]}"
 			else
-				exec "${HOME}/winecustom/${winefork[1]}" run "${game[4]}"
+				exec "${HOME}/winecustom/${winefork[1]}" run "${game[4]}" "${game[7]}"
 			fi
 		fi
 		exit 0
@@ -99,7 +100,6 @@ function main () {
 		add [title] [32/64] [proton/wine] [pathToExe (starting from \$HOME/winegames)] [exeTitle] [custom prefix] [optional commands] [application params]
 
 		(split multiple commands with ':')
-		application params are currently not supported for proton and its forks (cuz I don't know how to make em work yet)
 		EOT
 		exit 1
 		;;
