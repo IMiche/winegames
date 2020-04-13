@@ -1,0 +1,143 @@
+#!/bin/bash
+function main () {
+	if [[ $# -lt 1 ]] ; then
+		cat <<- EOT
+		Usage: winegames [command]
+
+		Available commands:
+		start [title]
+		add [title] [32/64] [proton/wine] [pathToExe (starting from \$HOME/winegames)] [exeTitle] [custom prefix] [optional commands] [application params]
+
+		(split multiple commands with ':')
+		application params are currently not supported for proton and its forks (cuz I don't know how to make em work yet)
+		EOT
+		exit 1
+	fi
+	case $1 in
+	"start")
+		param_count_test $# 2
+
+		find_game $2 "game does not exist" #search for our game
+
+		#execute optional stuff
+		IFS=':' read -ra cmds <<< ${game[6]}
+		i=0
+		while [[ i -lt ${#cmds[@]} ]] ; do
+			${cmds[i]}
+			((i++)) #arithmetic expansion, whatever tf that means
+		done
+		
+		cd "${HOME}/winegames/${game[3]}"
+		export WINEARCH=win${game[1]}
+
+		#define wine prefix
+		if [[ "${game[5]}" == "" ]]; then
+			export WINEPREFIX=${HOME}/${game[2]}${game[1]}
+		else
+			export WINEPREFIX=${HOME}/wineprefixcustom/${game[5]}
+		fi
+		export STEAM_COMPAT_DATA_PATH=$WINEPREFIX
+
+		#determine if to launch wine, proton or a custom fork
+		if [[ "${game[2]}" == "wine" ]]; then
+			echo "launching ${game[0]} through wine..."
+			exec wine "${game[4]}" "${game[7]}"
+		elif [[ "${game[2]}" == "proton" ]]; then
+			echo "launching ${game[0]} through proton..."
+			exec "${HOME}/.steam/steam/steamapps/common/Proton 5.0/proton" run "${game[4]}"
+		else
+			echo "launching ${game[0]} through ${game[2]}..."
+			#split needed because proton needs run command. fucking valve
+			IFS=':' read -ra winefork <<< ${game[2]}
+			if [[ "${winefork[0]}" == "wine" ]]; then
+				exec "${HOME}/winecustom/${winefork[1]}" "${game[4]}" "${game[7]}"
+			else
+				exec "${HOME}/winecustom/${winefork[1]}" run "${game[4]}"
+			fi
+		fi
+		exit 0
+		;;
+
+	"add")
+		param_count_test $# 6
+		
+		#make sure the game doesn't exist already
+		find_game_noexit $2
+		if [[ $? -eq 0 ]]; then echo "game already exists" ; exit 1 ; fi
+
+		cat <<- EOT >> ${HOME}/.config/winegames.cfg
+		${2};${3};${4};${5};${6};${7};${8};${9}
+		EOT
+		echo "added $2 into the list"
+		;;
+
+	"remove")
+		param_count_test $# 2
+
+		find_game $2 "game does not exist"
+		sed -i "${index}d" ${HOME}/.config/winegames.cfg #remove entry
+		;;
+
+	"winecfg")
+		param_count_test $# 2
+		find_game $2 "game does not exist"
+
+		cd ${HOME}/winegames/${game[3]}
+		export WINEARCH=win${game[1]}
+
+		#define wine prefix
+		if [[ "${game[5]}" == "" ]]; then
+			export WINEPREFIX=${HOME}/${game[2]}${game[1]}
+			echo "launching winecfg for ${game[0]} in prefix ${game[2]}${game[1]}"
+		else
+			export WINEPREFIX=${HOME}/wineprefixcustom/${game[5]}
+			echo "launching winecfg for ${game[0]} in custom prefix ${game[5]}"
+		fi
+		#append pfx to the env for proton prefixes
+		if [[ "${game[2]}" == "proton" ]]; then
+			export WINEPREFIX=$WINEPREFIX/pfx
+		fi
+		winecfg
+		;;
+
+	*)
+		echo "command does not exist"
+		exit 1
+		;;
+	esac
+}
+
+#search for game in protongames.cfg if found, returns 0 and saves line in array $game, else returns 1
+#furthermore saves the index of the game within winegames.cfg in the var 'index'
+#requires param: game title
+function find_game_noexit () {
+	index=1
+	while read -r line ; do
+		IFS=';' read -ra game <<< "$line" #split string
+		if [[ "$1" == "${game[0]}" ]] ; then #if it's the game we're looking for
+			return 0 #success
+		fi
+		((i++))
+	done < "${HOME}/.config/winegames.cfg"
+	return 1
+}
+
+#runs find_game_noexit and exits if no game is found while printing error message
+function find_game () {
+	find_game_noexit $1
+	if [[ $? -ne 0 ]] ; then echo $2 ; exit 1 ; fi
+}
+
+#simple comparator that exists with an error if it fails
+#(nice line reduction since I do this check for every single command)
+function param_count_test () {
+	if [[ $1 -lt $2 ]]; then
+		echo "not enough params"
+		exit 1
+	fi
+	return 0
+}
+
+#call the main code block
+#needed because you can't use functions before they're declarated
+main "$@"; exit
