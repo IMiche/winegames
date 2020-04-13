@@ -1,4 +1,4 @@
-# Winegames
+Winegames
 
 A simple script for launching games through wine or proton with custom settings
 
@@ -6,10 +6,13 @@ A simple script for launching games through wine or proton with custom settings
 
 ### Installation
 
-Just download the file and run it.
-I suggest moving it to /usr/local/bin
+Download the file (I suggest moving the file to /usr/local/bin/)
+
+Create a new 'winegames' folder in your home directory and move all your applications here that you want to run later.
 
 ### Usage
+
+Custom configurations for all your applications are saved in ~/.config/winegames.cfg
 
 To add a new entry
 ```
