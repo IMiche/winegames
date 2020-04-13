@@ -1,5 +1,9 @@
 #!/bin/bash
 function main () {
+
+	#create winegames.cfg if it doesn't exist
+	if [[ -f "$HOME/.config/winegames.cfg" ]]; then touch "$HOME/.config/winegames.cfg" ; fi
+
 	case $1 in
 	"start")
 		param_count_test $# 2
@@ -47,7 +51,7 @@ function main () {
 
 	"add")
 		param_count_test $# 6
-		
+
 		#make sure the game doesn't exist already
 		find_game_noexit $2
 		if [[ $? -eq 0 ]]; then echo "game already exists" ; exit 1 ; fi
