@@ -97,9 +97,22 @@ function main () {
 
 		Available commands:
 		start [title]
-		add [title] [32/64] [proton/wine] [pathToExe (starting from \$HOME/winegames)] [exeTitle] [custom prefix] [optional commands] [application params]
-
-		(split multiple commands with ':')
+			launch an application
+		add [title] [winearch] [proton/wine] [pathToExe] [exeTitle] [custom prefix] [optional commands] [application params]
+			add launch config to winegames.cfg
+		remove [title]
+			remove launch config from winegames.cfg
+		winecfg [title]
+			launch winecfg for the prefix of the launch config
+		
+		parameter definition:
+		[title]: identifier by which the launch config for an application is stored
+		[winearch]: self explanatory. note that you should only use 32/64 without 'win'
+		[proton/wine] what prefix to use. for a custom prefix specifiy if it's a wine or proton fork, append ':' then add the name of the fork. (note that forks are only searched for in "$HOME/winecustom")
+		[pathToExe] path to exe starting from "$HOME/winegames"
+		[custom prefix] self explanatory. leave empty if you want to use a generic prefix
+		[optional commands] add custom commands you want to run before launch, eg "export LANG=en_us.UTF-8". for multiple commands split them via ':'
+		[application params] params to launch the application with, eg "-fullscreen".
 		EOT
 		exit 1
 		;;
