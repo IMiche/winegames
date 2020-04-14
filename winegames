@@ -31,7 +31,6 @@ function main () {
 		fi
 		export STEAM_COMPAT_DATA_PATH=$WINEPREFIX
 
-		echo "${game[7]}"
 		#determine if to launch wine, proton or a custom fork
 		if [[ "${game[2]}" == "wine" ]]; then
 			echo "launching ${game[0]} through wine..."
