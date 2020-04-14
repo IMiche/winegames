@@ -99,6 +99,7 @@ function main () {
 		fi
 		winecfg
 		;;
+
 	"help")
 		cat <<- EOT
 		Usage: winegames [command]
@@ -124,10 +125,12 @@ function main () {
 		EOT
 		exit 1
 		;;
+
 	*)
 		echo "command does not exist"
 		exit 1
 		;;
+
 	esac
 }
 
@@ -152,7 +155,7 @@ function find_game () {
 	if [[ $? -ne 0 ]] ; then echo $2 ; exit 1 ; fi
 }
 
-#simple comparator that exists with an error if it fails
+#simple comparator that exits with an error if it fails
 #(nice line reduction since I do this check for every single command)
 function param_count_test () {
 	if [[ $1 -lt $2 ]]; then
