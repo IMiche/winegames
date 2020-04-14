@@ -1,8 +1,10 @@
 #!/bin/bash
 function main () {
 
-	#create winegames.cfg if it doesn't exist
+	#create winegames.cfg
 	if [[ -f "$HOME/.config/winegames.cfg" ]]; then touch "$HOME/.config/winegames.cfg" ; fi
+	#create wineprefixes folder
+	if [[ -d "$HOME/wineprefixes" ]]; then mkdir "$HOME/wineprefixes" ; fi
 
 	case $1 in
 	"start")
@@ -56,6 +58,13 @@ function main () {
 		#make sure the game doesn't exist already
 		find_game_noexit $2
 		if [[ $? -eq 0 ]]; then echo "game already exists" ; exit 1 ; fi
+
+		#create specific prefix folder
+		if [[ "${7}" == "" ]]; then
+			if [[ -d "$HOME/wineprefixes/${4}${3}" ]]; then mkdir "$HOME/wineprefixes/${4}${3}" ; fi
+		else
+			if [[ -d "$HOME/wineprefixes/${7}" ]]; then mkdir "$HOME/wineprefixes/${7}" ; fi
+		fi
 
 		cat <<- EOT >> ${HOME}/.config/winegames.cfg
 		${2};${3};${4};${5};${6};${7};${8};${9}
