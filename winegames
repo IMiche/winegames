@@ -2,9 +2,9 @@
 function main () {
 
 	#create winegames.cfg
-	if [[ -f "$HOME/.config/winegames.cfg" ]]; then touch "$HOME/.config/winegames.cfg" ; fi
+	if [[ ! -f "$HOME/.config/winegames.cfg" ]]; then touch "$HOME/.config/winegames.cfg" ; fi
 	#create wineprefixes folder
-	if [[ -d "$HOME/wineprefixes" ]]; then mkdir "$HOME/wineprefixes" ; fi
+	if [[ ! -d "$HOME/wineprefixes" ]]; then mkdir "$HOME/wineprefixes" ; fi
 
 	case $1 in
 	"start")
@@ -60,9 +60,9 @@ function main () {
 
 		#create specific prefix folder
 		if [[ "${7}" == "" ]]; then
-			if [[ -d "$HOME/wineprefixes/${4}${3}" ]]; then mkdir "$HOME/wineprefixes/${4}${3}" ; fi
+			if [[ ! -d "$HOME/wineprefixes/${4}${3}" ]]; then mkdir "$HOME/wineprefixes/${4}${3}" ; fi
 		else
-			if [[ -d "$HOME/wineprefixes/${7}" ]]; then mkdir "$HOME/wineprefixes/${7}" ; fi
+			if [[ ! -d "$HOME/wineprefixes/${7}" ]]; then mkdir "$HOME/wineprefixes/${7}" ; fi
 		fi
 
 		cat <<- EOT >> ${HOME}/.config/winegames.cfg
