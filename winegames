@@ -75,6 +75,7 @@ function main () {
 		param_count_test $# 2
 
 		find_game $2 "game does not exist"
+		echo "removing $2 from list..."
 		sed -i "${index}d" ${HOME}/.config/winegames.cfg #remove entry
 		;;
 
@@ -144,7 +145,7 @@ function find_game_noexit () {
 		if [[ "$1" == "${game[0]}" ]] ; then #if it's the game we're looking for
 			return 0 #success
 		fi
-		((i++))
+		((index++))
 	done < "${HOME}/.config/winegames.cfg"
 	return 1
 }
