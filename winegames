@@ -128,7 +128,7 @@ function main () {
 		;;
 
 	*)
-		echo "command does not exist"
+		echo "command does not exist. type winegames help for a list of commands"
 		exit 1
 		;;
 
