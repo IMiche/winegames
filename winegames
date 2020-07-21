@@ -118,7 +118,7 @@ function main () {
 		parameter definition:
 		[title]: identifier by which the launch config for an application is stored
 		[winearch]: self explanatory. note that you should only use 32/64 without 'win'
-		[proton/wine] what prefix to use. for a custom prefix specifiy if it's a wine or proton fork, append ':' then add the path to the wine/proton executable (including the name of the executable) starting from "$HOME/winecustom/"
+		[proton/wine] what build to use. for a custom build specifiy if it's a wine or proton fork, append ':' then add the path to the wine/proton executable (including the name of the executable) starting from "$HOME/winecustom/"
 		[pathToExe] path to exe starting from "$HOME/winegames"
 		[custom prefix] self explanatory. leave empty if you want to use a generic prefix
 		[optional commands] add custom commands you want to run before launch, eg "export LANG=en_us.UTF-8". for multiple commands split them via ':'
